@@ -1,0 +1,23 @@
+.ownai-conversationlist .search-icon{
+    border-radius: 10px 0 0 10px 
+}
+
+.ownai-conversationlist .conversation-item {
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.ownai-conversationlist .conversation-item.active {
+    background-color: #E8F0FE;
+}
+
+.ownai-conversationlist .conversation-avatar{
+    width: 48px;
+     height: 48px 
+}
+
+.ownai-conversationlist .last-conversation-time{
+    font-size: 0.75rem;
+}
+

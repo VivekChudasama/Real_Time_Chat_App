@@ -1,0 +1,22 @@
+.ownai-message .message-time{
+    font-size: 0.75rem;
+}
+
+.ownai-message .message-bubble {
+    max-width: 70%;
+    border-radius: 18px;
+}
+
+.ownai-message .message-bubble.me {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 18px;
+}
+
+.ownai-message .message-bubble.other {
+    border-top-right-radius: 18px;
+    border-top-left-radius: 4px;
+}
+
+.ownai-message .message-text{
+    font-size: 0.95rem;
+}

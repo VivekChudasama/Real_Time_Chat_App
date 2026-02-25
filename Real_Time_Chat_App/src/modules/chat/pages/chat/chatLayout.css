@@ -1,0 +1,11 @@
+ .ownai-chatlayout .conversations-sidebar {
+  width: 100%;
+}
+
+@media (min-width: 767px) {
+  .ownai-chatlayout .conversations-sidebar {
+    width: 350px;
+    min-width: 350px;
+  }
+}
+

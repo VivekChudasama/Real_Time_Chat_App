@@ -1,0 +1,124 @@
+.ownai-sidebar {
+    --hover-blue : #0d6efd;
+    --white : white;
+    --text-color : #6c757d;
+}
+.ownai-sidebar.sidebar-navigation {
+    min-height: 100vh;
+    width: 280px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.ownai-sidebar #logo {
+    height: 40px;
+    width: 110px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 767px) {
+    .ownai-sidebar #logo {
+        display: none;
+    }
+}
+
+@media (max-width: 2560px) {
+    .sidebar-navigation.collapsed {
+        #logo {
+            display: none;
+        }
+
+        display: none;
+    }
+
+}
+
+
+.sidebar-navigation.collapsed {
+    width: 80px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-navigation {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+
+    .sidebar-navigation.show {
+        transform: translateX(0);
+    }
+
+    /* On mobile hide sidebar */
+    .sidebar-navigation.collapsed {
+        width: 280px;
+        transform: translateX(-100%);
+    }
+}
+
+/* On desktop, sidebar width changes */
+@media (min-width: 769px) {
+    .sidebar-navigation {
+        position: static;
+        transform: none;
+    }
+}
+
+.ownai-sidebar .sidebar-brand-section {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    transition: all 0.3s;
+}
+
+.ownai-sidebar .collapsed .sidebar-brand-section {
+    justify-content: center;
+}
+
+.ownai-sidebar .sidebar-menu-item {
+    color: var(--text-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 50px;
+}
+
+.ownai-sidebar .collapsed .sidebar-menu-item {
+    justify-content: center;
+    padding: 0;
+    width: 50px;
+    margin: 0 auto;
+}
+
+.ownai-sidebar .sidebar-menu-item:hover {
+    color: var(--hover-blue);
+    background-color: var(--white);
+}
+
+.ownai-sidebar .sidebar-menu-item.active {
+    background-color: var(--hover-blue);
+    color: var(--white) ;
+    box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
+}
+
+/* Hide label when collapsed */
+.collapsed .sidebar-label {
+    display: none;
+
+}
+
+/* Hide company logo when collapsed */
+.collapsed .brand-text {
+    display: none;
+}

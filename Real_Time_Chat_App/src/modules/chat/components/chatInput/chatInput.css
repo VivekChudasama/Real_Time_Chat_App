@@ -1,0 +1,9 @@
+.ownai-chatinput .chat-input-btn{
+    width: '100px';
+     height: '40px';
+     padding: 0 ;
+}
+
+.ownai-chatinput .text-input-fontsize{
+    font-size: '0.95rem'
+}

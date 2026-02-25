@@ -1,0 +1,62 @@
+.ownai-header{
+    --button-hover: #f8f9fa;
+    --background-color: #fff;
+    --input-group: #f3f4f6
+}
+.ownai-header .header-navigation {
+    height: 70px;
+    padding: 0 1.5rem;
+}
+
+.ownai-header .header-search-container {
+    max-width: 400px;
+}
+
+/*for mobile*/
+@media (max-width:768px) and (min-width:900px) {
+    .ownai-header .header-search-container{
+        max-width: 200px;
+        margin-right:20px ;
+    }
+}
+
+.ownai-header .search-input-group {
+    background-color: var(--input-group);
+    border-radius: 12px;
+    border: 1px solid transparent;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.ownai-header .search-input-group:focus-within {
+    background-color: var(--background-color);
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1);
+}
+
+.ownai-header .search-icon-container {
+    background-color: transparent ;
+    border: none ;
+    padding-left: 1.25rem;
+}
+
+.ownai-header .search-text-field {
+    background-color: transparent ;
+    border: none ;
+    font-size: 0.95rem;
+    padding-left: 0.5rem;
+}
+
+.ownai-header .icon-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.ownai-header .icon-button:hover {
+    background-color: var(--button-hover);
+}
+

@@ -1,0 +1,153 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Button } from 'react-bootstrap';
+import { FaSearch, FaEllipsisV, FaArrowLeft } from 'react-icons/fa';
+import ChatInput from '../chatInput/chatInput';
+import MessageItem from '../Messages/messages';
+import { fetchMessages, sendMessage } from '../../services/chatApi';
+import "./chatwindow.css"
+
+import { io } from 'socket.io-client';
+
+const ENDPOINT = "http://localhost:3001";
+
+const ChatWindow = ({ currentUser, selectedUser, onBack }) => {
+    const [messages, setMessages] = useState([]);
+    const [socket, setSocket] = useState(null);
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        const newSocket = io(ENDPOINT);
+        setSocket(newSocket);
+
+        return () => newSocket.close();
+    }, [currentUser]);
+
+    // Join Conversation Room
+    useEffect(() => {
+        if (!socket || !selectedUser || !currentUser) return;
+
+        const room = [currentUser.uid, selectedUser.id].sort().join('_');
+        socket.emit('join_conversation', room);
+
+        const handleMessage = (newMessage) => {
+            setMessages((prev) => [...prev, newMessage]);
+        };
+
+        socket.on('receive_message', handleMessage);
+
+        return () => {
+            socket.off('receive_message', handleMessage);
+        };
+    }, [socket, selectedUser, currentUser]);
+
+    // Fetch History
+    useEffect(() => {
+        const loadMessages = async () => {
+            if (selectedUser?.id && currentUser) {
+                const room = [currentUser.uid, selectedUser.id].sort().join('_');
+                try {
+                    const history = await fetchMessages(room);
+                    setMessages(history);
+                } catch (e) {
+                    console.error("Error fetching history", e);
+                }
+            }
+        };
+        loadMessages();
+    }, [selectedUser, currentUser]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
+
+    const handleSend = async (text) => {
+        if (!selectedUser || !text.trim()) return;
+
+        const room = [currentUser.uid, selectedUser.id].sort().join('_');
+        const messageData = {
+            conversationId: room,
+            content: text,
+            senderId: currentUser.uid,
+            type: 'text'
+        };
+
+        try {
+            console.log("Sending message API:", messageData);
+            await sendMessage(messageData);
+        } catch (error) {
+            console.error("Failed to send", error);
+        }
+    };
+
+    if (!selectedUser) {
+        return (
+            <div className="h-100 d-flex align-items-center justify-content-center text-muted">
+                Select a user to start chatting
+            </div>
+        );
+    }
+
+
+    const uiMessages = messages.map((msg, index) => {
+        let messageTime = '';
+        if (msg.message_at) {
+            const dateObj = msg.message_at.seconds
+                ? new Date(msg.message_at.seconds * 1000)
+                : new Date(msg.message_at);
+
+            if (!isNaN(dateObj.getTime())) {
+                messageTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+        }
+
+        return {
+            id: msg.messageId || index,
+            content: msg.content,
+            sender: msg.senderId === currentUser.uid ? 'Me' : selectedUser.user.name,
+            time: messageTime,
+            isMe: msg.senderId === currentUser.uid,
+            type: msg.type || 'text',
+        };
+    });
+
+    return (
+        <div className="d-flex flex-column h-100 ownai-chatwindow">
+            <div className="d-flex justify-content-between align-items-center p-3 border-bottom bg-light bg-opacity-10">
+                <div className="d-flex align-items-center">
+                    <Button
+                        variant="link"
+                        className="d-lg-none me-2 text-dark p-0 shadow-none text-decoration-none"
+                        onClick={onBack}
+                    >
+                        <FaArrowLeft size={18} />
+                    </Button>
+                        <img
+                            src={selectedUser.user.avatar}
+                            alt={selectedUser.user.name}
+                            className="rounded-circle me-3 border profil-pic"
+                        />
+
+                    <h6 className="mb-0 fw-bold">{selectedUser.user.name}</h6>
+                </div>
+                <div>
+                    <Button variant="link" className="text-secondary shadow-none"><FaSearch /></Button>
+                    <Button variant="link" className="text-secondary shadow-none"><FaEllipsisV /></Button>
+                </div>
+            </div>
+
+            {/* Messages Area */}
+            <div className="flex-grow-1 overflow-auto p-4 bg-white scroll-messages">
+                {uiMessages.map((msg) => (
+                    <MessageItem key={msg.id} message={msg} isMe={msg.isMe} />
+                ))}
+                <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <ChatInput onSend={handleSend} />
+        </div>
+    );
+};
+
+export default ChatWindow;

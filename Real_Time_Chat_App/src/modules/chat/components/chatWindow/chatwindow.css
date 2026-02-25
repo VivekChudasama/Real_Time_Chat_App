@@ -1,0 +1,7 @@
+.ownai-chatwindow .profil-pic{
+    width: 40px; height: 40px
+}
+
+.ownai-chatwindow .scroll-messages{
+    scroll-behavior: smooth;
+}
